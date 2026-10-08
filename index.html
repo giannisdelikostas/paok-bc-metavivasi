@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PAOK BC Ticket Exchange</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#000;--card:#0d0d0d;--c2:#1a1a1a;--line:#262626;--gold:#e0ae36;--ink:#f2f2f2;--mut:#8b8b8b;--ok:#34d399;--blue:#60a5fa;--bad:#f87171;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Inter,system-ui,sans-serif}
+.w{max-width:1120px;margin:0 auto;padding:16px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:#000;border-bottom:1px solid var(--line)}
+header .w{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 16px}
+h1{font-size:18px;margin:0;font-weight:800}h1 b{color:var(--gold)}
+.sm{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.07em;font-weight:600}
+h2{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--mut);margin:6px 0 10px}
+button,select,input{font:inherit;color:var(--ink)}
+button{cursor:pointer;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px}
+.gold{background:var(--gold);border-color:var(--gold);color:#111;font-weight:800}
+.slider{display:flex;gap:12px;overflow-x:auto;padding:2px 2px 12px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.slider::-webkit-scrollbar{display:none}
+.mc{flex:0 0 235px;gap:4px;scroll-snap-align:start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer;text-align:left;height:122px;display:flex;flex-direction:column;justify-content:space-between}
+.mc.on{border-color:var(--gold);background:var(--c2)}
+.mc.all{flex-basis:140px;background:var(--gold);color:#111;font-weight:800;border-color:var(--gold)}
+.mc .t{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mc .m{font-size:12px;color:var(--mut);display:flex;justify-content:space-between}.mc.all .m{color:#111;font-size:17px;font-weight:800}
+.tag{font-size:10px;font-weight:700;padding:1px 6px;border-radius:5px;background:rgba(224,174,54,.12);color:var(--gold);border:1px solid rgba(224,174,54,.3)}
+.sw{position:relative}
+.ar{position:absolute;top:calc(50% - 6px);transform:translateY(-50%);width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.85);border:1px solid var(--gold);color:var(--gold);padding:0;z-index:2;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center}
+.ar.l{left:-8px}.ar.r{right:-8px}.ar[disabled]{display:none}
+.cd{display:inline-block;font-size:10px;font-weight:800;color:var(--bad);background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.4);padding:1px 6px;border-radius:5px}
+label.ck{display:flex;gap:9px;align-items:flex-start;color:var(--ink);font-size:13px;margin-top:12px;font-weight:600}
+label.ck input{width:20px;height:20px;flex:none;margin:0;accent-color:var(--gold)}
+.pinbox{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:8px;font-size:12px;color:var(--mut)}
+.pinbox b{color:var(--ink)}.pinbox ol{margin:6px 0 0;padding-left:18px}.pinbox li{margin:4px 0}
+.top{display:flex;justify-content:space-between;font-size:10px;font-weight:700}
+.grid{display:grid;grid-template-columns:1fr;gap:18px;margin-top:10px}
+@media(min-width:920px){.grid{grid-template-columns:5fr 7fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+.map{width:100%;height:auto;background:var(--bg);border:1px solid var(--line);border-radius:10px;display:block}
+.sec rect{fill:var(--c2);stroke:var(--line);stroke-width:2;cursor:pointer;transition:fill .15s}
+.sec text{fill:var(--mut);font-weight:700;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.sec.v rect{fill:rgba(224,174,54,.3)}.sec.s rect{fill:rgba(190,198,210,.3)}.sec.b rect{fill:rgba(205,127,50,.5)}.sec.k rect{fill:var(--bg)}.sec.c rect{fill:rgba(59,130,246,.5)}
+.sec:hover rect{stroke:var(--gold)}
+.sec.has rect{fill:var(--gold)}.sec.has text{fill:#111}
+.sec.sel rect{stroke:#fff;stroke-width:5}
+.gp rect{fill:var(--card);stroke:var(--gold);stroke-width:2.5;cursor:pointer}.gp text{fill:var(--ink);font-weight:800;font-size:19px;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.gp.sel rect{fill:var(--gold)}.gp.sel text{fill:#111}
+.ctx{fill:var(--mut);font-size:15px;text-anchor:middle;font-weight:700;letter-spacing:.1em}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.sb{justify-content:space-between}
+.badge{font-size:10px;font-weight:700;background:rgba(224,174,54,.15);color:var(--gold);border:1px solid rgba(224,174,54,.35);padding:3px 8px;border-radius:6px}
+.legend{font-size:12px;color:var(--mut);margin:10px 0 0;display:flex;gap:8px;align-items:center}
+.dot{width:12px;height:12px;background:var(--gold);border-radius:3px;display:inline-block}
+.wal{border-left:4px solid var(--blue)}
+.wal .st{font-size:13px;margin:8px 0;display:flex;gap:8px}.wal .st b:first-child{color:var(--blue);flex:none}
+.warnbox{background:rgba(248,113,113,.1);border:1px solid var(--bad);color:var(--bad);border-radius:10px;padding:10px;font-size:12px;font-weight:600;margin-top:10px}
+.tk{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;transition:opacity .2s}
+.tk.done{opacity:.55}
+.pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px}
+.p-ok{background:rgba(52,211,153,.15);color:var(--ok);border:1px solid rgba(52,211,153,.35)}.p-done{background:var(--c2);color:var(--mut);border:1px solid var(--line)}
+h4{margin:8px 0;font-size:17px}
+.chip{font-size:12px;background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:4px 9px}.chip b{color:var(--gold)}
+.side{display:flex;flex-direction:column;gap:8px;align-items:flex-end;justify-content:center;min-width:190px;border-left:1px solid var(--line);padding-left:14px}
+@media(max-width:560px){.side{border-left:0;border-top:1px solid var(--line);padding:10px 0 0;align-items:stretch;width:100%}}
+.ct{display:block;text-align:center;font-weight:700;background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.35);color:var(--blue);padding:8px 12px;border-radius:9px;text-decoration:none;word-break:break-all}
+.hid{font-size:12px;color:var(--mut);font-style:italic;padding:8px 10px;border:1px solid var(--line);border-radius:9px}
+.lb{font-size:10px;color:var(--mut);font-weight:700;letter-spacing:.07em}
+.xs{font-size:12px;padding:6px 10px}
+.ghost{border:0;background:none;color:var(--mut);padding:4px 6px}
+dialog{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;width:min(460px,94vw);padding:18px;max-height:90vh}
+dialog::backdrop{background:rgba(0,0,0,.85)}
+label{display:block;font-size:12px;color:var(--mut);margin:10px 0 4px;font-weight:600}
+input,select{width:100%;padding:9px;border-radius:9px;border:1px solid var(--line);background:var(--bg)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fine{font-size:12px;color:var(--mut)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--gold);color:#111;font-weight:700;padding:9px 16px;border-radius:99px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+.toast.on{opacity:1}
+.empty{text-align:center;color:var(--mut);padding:24px}
+.cnt{background:var(--c2);color:var(--gold);font-size:12px;padding:2px 10px;border-radius:99px}
+</style>
+</head>
+<body>
+<header><div class="w"><div class="row" style="flex-wrap:nowrap"><span style="font-size:28px">🦅</span><div><h1>PAOK BC <b>Ticket Exchange</b></h1><div class="sm">Πλατφόρμα για μεταβίβαση εισιτηρίων</div></div></div><button class="gold" onclick="addDlg()">＋ Προσθήκη Εισιτηρίου</button></div></header>
+<main class="w">
+<h2>📅 Προσεχείς αγώνες · PAOK Sports Arena</h2>
+<div class="sw"><button class="ar l" id="al" onclick="sl2(-1)" aria-label="Προηγούμενοι αγώνες">‹</button><div class="slider" id="sl"></div><button class="ar r" id="ar" onclick="sl2(1)" aria-label="Επόμενοι αγώνες">›</button></div>
+<div class="grid">
+<div>
+<div class="card"><div class="row sb" style="margin-bottom:10px"><b>🗺️ Χάρτης PAOK Sports Arena</b><span class="badge" id="gb">Όλες οι θέσεις</span></div>
+<svg class="map" id="mp" viewBox="150 20 1020 950"></svg>
+<div class="legend"><span class="dot"></span> Υπάρχουν διαθέσιμα εισιτήρια. Πάτα θύρα ή τμήμα για φίλτρο.</div></div>
+<div class="card wal"><b>Πώς γίνεται η επίσημη μεταβίβαση</b><div class="fine" style="margin-bottom:6px">Μέσω Gov.gr Wallet (tickets.gov.gr)</div>
+<div class="st"><b>Βήμα 1:</b><span>Άνοιξε το Gov.gr Wallet → «Εισιτήρια» → το εισιτήριο διαρκείας σου.</span></div>
+<div class="st"><b>Βήμα 2:</b><span>Τρεις τελείες πάνω δεξιά → <b>«Μεταβίβαση»</b>.</span></div>
+<div class="st"><b>Βήμα 3:</b><span>Γράψε τον <b>ΑΦΜ</b> του παραλήπτη και πάτα «Εισαγωγή».</span></div>
+<div class="st"><b>Βήμα 4:</b><span>Ο παραλήπτης το βλέπει στα «Αιτήματα» και πατά <b>«Αποδοχή»</b>.</span></div>
+<div class="st"><b>Βήμα 5:</b><span>Αν δεν έχει γίνει αποδοχή, ο κάτοχος μπορεί να κάνει «Ανάκληση».</span></div>
+<div class="warnbox">⚠ Η ΚΑΕ ορίζει όριο μεταβιβάσεων ανά εισιτήριο και προθεσμία πριν από κάθε αγώνα. Ολοκλήρωσέ το εγκαίρως.</div></div>
+</div>
+<div>
+<div class="row sb" style="margin-bottom:10px"><div class="row"><b style="font-size:20px">Διαθέσιμα Εισιτήρια</b><span class="cnt" id="cn">0</span></div><button class="ghost" onclick="reset()">↻ Καθαρισμός</button></div>
+<div id="ls"></div>
+<p class="fine">Η πλατφόρμα δεν είναι επίσημη και δεν συνδέεται με την ΚΑΕ ΠΑΟΚ. Δεν πρόκειται για αγοραπωλησία εισιτηρίων: η πλατφόρμα απλώς βοηθά στη μεταβίβαση, φέρνοντας σε επαφή τους ενδιαφερόμενους. Αν κάποιος ζητήσει χρήματα για το εισιτήριο ή όχι, αφορά αποκλειστικά εκείνον και όχι την πλατφόρμα. Τα στοιχεία επικοινωνίας που δηλώνονται είναι δημόσια μέχρι να σημειωθεί το εισιτήριο ως μεταβιβασμένο. Η επικοινωνία γίνεται με δική σας ευθύνη.</p>
+</div></div>
+</main>
+<dialog id="d"></dialog><div class="toast" id="to"></div>
+<script>
+// Αγώνες από το επίσημο πρόγραμμα paokbc.gr (30/09/2026). Οι αγγελίες είναι δείγματα.
+var GB="GBL",EC="EuroCup";
+var M=[["Δόξα Λευκάδας","Σαβ 10 Οκτ","16:00",GB,1],["Ratiopharm Ulm","Τετ 21 Οκτ","20:00",EC],["ΑΕΚ","Σαβ 24 Οκτ","17:30",GB],["Roma BC","Τρι 3 Νοε","20:00",EC],["Vikos Falcons","Σαβ 7 Νοε","17:30",GB],["Άρης","Σαβ 21 Νοε","17:30",GB],["Προμηθέας Πάτρας","Σαβ 5 Δεκ","16:00",GB],["Bosna Sarajevo","Τρι 8 Δεκ","20:00",EC],["Lietkabelis Panevezys","Τετ 16 Δεκ","20:00",EC],["Παναθηναϊκός AKTOR","Κυρ 27 Δεκ","17:30",GB],["Bahcesehir College","Τρι 29 Δεκ","20:30",EC],["Περιστέρι Betsson","Κυρ 3 Ιαν","13:00",GB],["Balkan Botevgrad","Τετ 13 Ιαν","19:30",EC]].map(function(a,i){return{id:i+1,opp:a[0],d:a[1],t:a[2],c:a[3],cd:a[4]}});
+// Τμήματα: [κλειδί, cx, cy, w, h, περιστροφή, κλάση, ετικέτα]
+var SEC=[["301",522,174,84,46,0,""],["302",613,174,88,46,0,""],["303",703,174,84,46,0,""],["304",793,174,84,46,0,""],
+["201",525,224,90,40,0,""],["202",601,224,55,40,0,""],["BRONZE",659,224,57,40,0,"b"],["203",717,224,54,40,0,""],["204",792,224,86,40,0,""],
+["VIP2",555,300,80,70,0,"v"],["VIP3",630,300,62,70,0,"v"],["VIP4",695,300,58,70,0,"v"],["VIP5",764,300,76,70,0,"v"],["VIP1",502,312,80,52,-32,"v"],["VIP6",818,318,80,52,38,"s"],
+["227",455,258,62,44,-40,""],["226",383,337,62,44,-58,""],["205",869,265,62,44,40,""],["206",934,335,62,44,58,""],["116",448,362,70,50,-48,""],["103",864,367,70,50,48,""],
+["225",318,411,68,56,0,""],["224",318,468,68,54,0,""],["223",318,525,68,54,0,""],["222",318,582,68,54,0,""],["221",318,640,68,56,0,""],
+["207",1000,411,68,56,0,""],["208",1000,468,68,54,0,""],["209",1000,525,68,54,0,""],["210",1000,582,68,54,0,""],["211",1000,640,68,56,0,""],
+["115",425,455,68,110,0,""],["114",428,572,68,100,0,""],["104",896,462,68,120,0,""],["105",900,575,68,100,0,""],
+["113",449,678,62,44,50,""],["112",507,730,58,44,45,""],["106",871,678,62,44,-50,""],["107",812,735,60,44,-40,""],
+["111",570,750,80,62,0,"k"],["110",629,750,56,62,0,"k"],["109",684,750,56,62,0,"k"],["108",752,750,80,62,0,"k"],
+["218",540,815,90,42,0,""],["217",607,815,48,42,0,""],["216",662,815,56,42,0,""],["215",718,815,54,42,0,""],["214",786,815,80,42,0,""],
+["220",380,715,62,44,58,""],["219",446,782,62,44,40,""],["212",936,712,62,44,-58,""],["213",868,778,62,44,-40,""],
+["308",524,872,88,46,0,""],["307",613,872,88,46,0,""],["306",706,872,86,46,0,""],["305",792,872,84,46,0,""],
+["COURT 1",492,560,20,86,0,"c","1"],["COURT 4",826,560,20,86,0,"c","4"],["COURT 2",596,690,64,20,0,"c","2"],["COURT 3",720,690,64,20,0,"c","3"]];
+var GT=[["4",658,55],["14",658,948],["8",215,520],["18",1101,520]];
+function mapInit(){
+ var o='<polygon points="480,140 836,140 1040,372 1040,680 836,905 480,905 280,680 280,372" fill="none" stroke="var(--line)" stroke-width="4"/><rect x="470" y="345" width="375" height="360" rx="12" fill="var(--bg)" stroke="var(--line)" stroke-width="2"/><rect x="512" y="440" width="296" height="170" rx="4" fill="rgba(224,174,54,.18)" stroke="var(--gold)" stroke-width="2"/><line x1="660" y1="440" x2="660" y2="610" stroke="var(--gold)" stroke-width="2"/><circle cx="660" cy="525" r="30" fill="none" stroke="var(--gold)" stroke-width="2"/><rect x="512" y="490" width="60" height="70" fill="none" stroke="var(--gold)" stroke-width="1.5"/><rect x="748" y="490" width="60" height="70" fill="none" stroke="var(--gold)" stroke-width="1.5"/><text x="660" y="528" text-anchor="middle" font-size="26">🦅</text><text class="ctx" x="660" y="390">PAOK SPORTS ARENA</text>';
+ SEC.forEach(function(s){var r=s[5]?' transform="rotate('+s[5]+' '+s[1]+' '+s[2]+')"':'',l=s[7]||s[0],fs=s[0].length>4&&!s[7]?11:s[0].length==4&&!s[7]?15:17;
+  o+='<g class="sec '+s[6]+'" data-k="'+s[0]+'" onclick="sec(\''+s[0]+'\')"'+r+'><rect x="'+(s[1]-s[3]/2)+'" y="'+(s[2]-s[4]/2)+'" width="'+s[3]+'" height="'+s[4]+'" rx="6"/><text x="'+s[1]+'" y="'+s[2]+'" font-size="'+fs+'">'+l+'</text></g>'});
+ GT.forEach(function(g){o+='<g class="gp" data-g="'+g[0]+'" onclick="gate(\''+g[0]+'\')"><rect x="'+(g[1]-62)+'" y="'+(g[2]-19)+'" width="124" height="38" rx="19"/><text x="'+g[1]+'" y="'+g[2]+'">GATE '+g[0]+'</text></g>'});
+ $("mp").innerHTML=o}
+var H=36e5,now=Date.now();
+var T=[{id:1,m:2,gate:"4",sec:"202",row:"15",seat:"22",contact:"6900000001",pin:"1234",st:"open",ts:now-H},
+{id:2,m:2,gate:"14",sec:"108",row:"5",seat:"11",contact:"sample.fan@example.com",pin:"1234",st:"open",ts:now-3*H},
+{id:3,m:3,gate:"8",sec:"115",row:"8",seat:"12",contact:"",pin:"1234",st:"done",ts:now-30*H},
+{id:4,m:3,gate:"18",sec:"COURT 4",row:"1",seat:"4",contact:"6900000002",pin:"1234",st:"open",ts:now-50*H}];
+var S={m:0,g:"",s:""},nid=50;
+try{var z=JSON.parse(localStorage.getItem("pt5")||"null");if(z){T=z.T;nid=z.n}}catch(e){}
+function save(){try{localStorage.setItem("pt5",JSON.stringify({T:T,n:nid}))}catch(e){}}
+function e(s){return String(s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function $(i){return document.getElementById(i)}
+function toast(x){var t=$("to");t.textContent=x;t.className="toast on";setTimeout(function(){t.className="toast"},2200)}
+function ago(ts){var m=Math.round((Date.now()-ts)/6e4);return m<2?"μόλις τώρα":m<60?m+" λεπτά πριν":m<1440?Math.round(m/60)+" ώρες πριν":Math.round(m/1440)+" μέρες πριν"}
+function mt(id){return M.filter(function(x){return x.id==id})[0]}
+function find(id){return T.filter(function(x){return x.id==id})[0]}
+function av(m){return T.filter(function(x){return x.st!="done"&&(!m||x.m==m)})}
+function parseC(v){v=(v||"").trim();if(/^[^\s@<>"']+@[^\s@<>"']+\.[^\s@<>"']+$/.test(v))return{h:"mailto:"+v,t:v,i:"✉️"};var d=v.replace(/[\s-]/g,"");if(/^\+?\d{8,14}$/.test(d))return{h:"tel:"+d,t:v,i:"📞"};return null}
+function render(){var sc=$("sl").scrollLeft;
+ $("sl").innerHTML='<button class="mc all" onclick="pick(0)"><div class="t">Όλοι οι αγώνες</div><div class="m">'+M.length+' Αγώνες</div></button>'+M.map(function(x){return '<button class="mc '+(S.m==x.id?"on":"")+'" onclick="pick('+x.id+')"><div class="top"><span class="tag">HOME</span><span class="mut" style="color:var(--mut)">'+x.c+'</span></div><div class="t">ΠΑΟΚ vs '+e(x.opp)+'</div>'+(x.cd?'<div><span class="cd">ΚΕΚΛΕΙΣΜΕΝΩΝ ΤΩΝ ΘΥΡΩΝ</span></div>':'')+'<div class="m"><span>'+x.d+'</span><span>'+x.t+'</span></div></button>'}).join("");
+ var a=av(S.m),has={};a.forEach(function(t){has[t.sec]=1});
+ document.querySelectorAll(".sec").forEach(function(g){var k=g.getAttribute("data-k");g.classList.toggle("has",!!has[k]);g.classList.toggle("sel",S.s==k)});
+ document.querySelectorAll(".gp").forEach(function(g){g.classList.toggle("sel",S.g==g.getAttribute("data-g"))});
+ $("gb").textContent=S.s?"Τμήμα "+S.s:S.g?"Gate "+S.g:"Όλες οι θέσεις";
+ var l=T.filter(function(x){return(!S.m||x.m==S.m)&&(!S.g||x.gate==S.g)&&(!S.s||x.sec==S.s)}).sort(function(p,q){return (p.st=="done")-(q.st=="done")||q.ts-p.ts});
+ $("cn").textContent=l.filter(function(x){return x.st!="done"}).length;
+ $("ls").innerHTML=l.length?l.map(card).join(""):'<div class="card empty">🎟️ Δεν βρέθηκαν εισιτήρια για αυτά τα κριτήρια.</div>';
+ $("sl").scrollLeft=sc;arrows();
+}
+function sl2(d){$("sl").scrollBy({left:d*480,behavior:"smooth"})}
+function arrows(){var q=$("sl");$("al").disabled=q.scrollLeft<5;$("ar").disabled=q.scrollLeft+q.clientWidth>=q.scrollWidth-5}
+function cdw(){var w=$("cdw");if(w)w.hidden=!mt(+$("fm").value).cd}
+function card(t){
+ var x=mt(t.m),d=t.st=="done",c=parseC(t.contact);
+ return '<div class="card tk '+(d?"done":"")+'"><div style="flex:1;min-width:200px"><div class="row">'+(d?'<span class="pill p-done">🔒 ΜΕΤΑΒΙΒΑΣΤΗΚΕ</span>':'<span class="pill p-ok">ΔΙΑΘΕΣΙΜΟ</span>')+'<span class="fine">• '+ago(t.ts)+'</span></div><h4>ΠΑΟΚ vs '+e(x.opp)+'</h4><div class="fine" style="margin-bottom:8px">'+x.d+' · '+x.t+' · '+x.c+(x.cd?' · <span class="cd">ΚΕΚΛΕΙΣΜΕΝΩΝ ΤΩΝ ΘΥΡΩΝ</span>':'')+'</div><div class="row"><span class="chip">Θύρα: <b>'+e(t.gate)+'</b></span><span class="chip">Τμήμα: <b>'+e(t.sec)+'</b></span><span class="chip">Σειρά: <b>'+e(t.row)+'</b> | Θέση: <b>'+e(t.seat)+'</b></span></div></div>'+
+ '<div class="side"><div class="lb">ΕΠΙΚΟΙΝΩΝΙΑ:</div>'+(d?'<div class="hid">👁‍🗨 Τα στοιχεία επικοινωνίας έχουν κρυφτεί.</div>':(c?'<a class="ct" href="'+e(c.h)+'">'+c.i+' '+e(c.t)+'</a>':'')+'<div class="row"><button class="xs" style="color:var(--gold);border-color:var(--gold)" onclick="fin('+t.id+')">✓ Μεταβιβάστηκε</button><button class="ghost xs" onclick="toast(\'Η αναφορά θα φτάνει στον admin\')">⚑ Αναφορά</button></div>')+'</div></div>';
+}
+function pick(i){S.m=i;render()}
+function gate(g){S.g=S.g==g?"":g;S.s="";render()}
+function sec(k){S.s=S.s==k?"":k;S.g="";render()}
+function reset(){S.m=0;S.g="";S.s="";render()}
+function dlg(h){$("d").innerHTML=h;$("d").showModal()}function cl(){$("d").close()}
+function fin(id){dlg('<h3 style="margin-top:0">Μεταβιβάστηκε το εισιτήριο;</h3><p class="fine">Βάλε το PIN της αγγελίας σου. Τα στοιχεία επικοινωνίας θα κρυφτούν για να μην σε ενοχλούν άλλοι.</p><label>4ψήφιο PIN</label><input id="pp" type="password" maxlength="4" inputmode="numeric" style="width:120px"><p class="fine">Δοκιμή: στις αγγελίες δείγματα το PIN είναι 1234.</p><div class="row" style="margin-top:12px"><button onclick="cl()">Άκυρο</button><button class="gold" onclick="ok('+id+',1)">Μεταβιβάστηκε</button><button class="ghost" onclick="ok('+id+',0)">Διαγραφή αγγελίας</button></div>')}
+function ok(id,m){var t=find(id);if($("pp").value!==t.pin){toast("Λάθος PIN");return}
+ if(m){t.st="done";t.contact="";toast("Σημειώθηκε ως μεταβιβασμένο")}else{T=T.filter(function(x){return x.id!=id});toast("Η αγγελία διαγράφηκε")}save();cl();render()}
+function rg(a,b){var r=[];for(var i=a;i<=b;i++)r.push(i);return r}
+function secOpts(){return [["100",rg(103,116)],["200",rg(201,227)],["300",rg(301,308)],["VIP",["VIP1","VIP2","VIP3","VIP4","VIP5","VIP6","BRONZE"]],["Court seats",["COURT 1","COURT 2","COURT 3","COURT 4"]]].map(function(g){return '<optgroup label="'+g[0]+'">'+g[1].map(function(v){return '<option'+(S.s==v?" selected":"")+'>'+v+'</option>'}).join("")+'</optgroup>'}).join("")}
+function addDlg(){dlg('<h3 style="margin-top:0">🎟️ Προσθήκη εισιτηρίου</h3><p class="fine">Βάλε αγγελία μόνο αν είσαι σίγουρος ότι δεν θα πας στον αγώνα.</p><label>Αγώνας</label><select id="fm" onchange="cdw()">'+M.map(function(x){return '<option value="'+x.id+'"'+(S.m==x.id?" selected":"")+'>ΠΑΟΚ vs '+e(x.opp)+' ('+x.d+')</option>'}).join("")+'</select><div class="warnbox" id="cdw" hidden>Ο αγώνας διεξάγεται κεκλεισμένων των θυρών, χωρίς είσοδο κοινού.</div><div class="g2"><div><label>Θύρα</label><select id="gt"><option>4</option><option>8</option><option>14</option><option>18</option></select></div><div><label>Τμήμα</label><select id="sc">'+secOpts()+'</select></div><div><label>Σειρά</label><input id="rw" maxlength="6"></div><div><label>Θέση</label><input id="st2" maxlength="6"></div></div><label>Στοιχεία επικοινωνίας (τηλέφωνο ή email)</label><input id="ct" maxlength="60"><label class="ck"><input type="checkbox" id="ak"><span>Επιβεβαιώνω και αποδέχομαι ότι τα στοιχεία επικοινωνίας μου θα φαίνονται δημόσια σε όλους, μέχρι να πατήσω «Μεταβιβάστηκε».</span></label><label>Μυστικό PIN 4 ψηφίων</label><input id="pn" type="password" maxlength="4" inputmode="numeric" style="width:120px"><div class="pinbox"><b>Πώς δουλεύει το PIN</b><ol><li>Διάλεξε 4 ψηφία και κράτα τα, δεν υπάρχει επαναφορά.</li><li>Όταν το εισιτήριο μεταβιβαστεί, ή δεν είναι πια διαθέσιμο για οποιονδήποτε λόγο, βρες την αγγελία σου και πάτα «✓ Μεταβιβάστηκε».</li><li>Βάλε το PIN. Η αγγελία θα εμφανιστεί ως μη διαθέσιμη και τα στοιχεία επικοινωνίας σου θα κρυφτούν.</li><li>Αν δεν το κάνεις, η αγγελία θα μένει διαθέσιμη και θα συνεχίσουν να σε παίρνουν τηλέφωνο.</li></ol></div><div class="row" style="margin-top:12px"><button onclick="cl()">Άκυρο</button><button class="gold" onclick="add()">Δημοσίευση</button></div>');cdw()}
+function add(){var p=$("pn").value,c=$("ct").value.trim(),r=$("rw").value.trim(),s=$("st2").value.trim();
+ if(!r||!s){toast("Συμπλήρωσε σειρά και θέση");return}
+ if(!$("ak").checked){toast("Χρειάζεται η επιβεβαίωση για τα στοιχεία επικοινωνίας");return}
+ if(!parseC(c)){toast("Βάλε έγκυρο τηλέφωνο ή email");return}
+ if(!/^\d{4}$/.test(p)){toast("Το PIN θέλει 4 ψηφία");return}
+ T.push({id:++nid,m:+$("fm").value,gate:$("gt").value,sec:$("sc").value,row:r,seat:s,contact:c,pin:p,st:"open",ts:Date.now()});save();cl();S.m=+$("fm").value;S.g="";S.s="";render();toast("Η αγγελία δημοσιεύτηκε")}
+mapInit();$("sl").addEventListener("scroll",arrows);render();
+</script>
+</body>
+</html>
